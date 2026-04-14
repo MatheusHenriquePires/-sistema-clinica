@@ -1,251 +1,121 @@
-# 🏥 Sistema de Clínica Médica — Backend
+# 🏥 Clínica API
 
-API REST completa para gerenciamento de uma clínica médica, desenvolvida com Spring Boot, JPA e autenticação JWT.
-
----
-
-## 🚀 Tecnologias utilizadas
-
-- **Java 21**
-- **Spring Boot 4.0.4**
-- **Spring Data JPA** — persistência de dados
-- **Spring Security** — autenticação e autorização
-- **H2 Database** — banco de dados embutido
-- **JWT (jjwt 0.12.6)** — tokens de autenticação
-- **Springdoc OpenAPI 2.8.6** — documentação automática (Swagger)
-- **Maven** — gerenciamento de dependências
+Sistema fullstack de gestão de clínica médica com autenticação JWT, desenvolvido com **Java + Spring Boot** no backend e **Angular** no frontend.
 
 ---
 
-## 📁 Estrutura do projeto
+## 🚀 Tecnologias
+
+### Backend
+![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white)
+![Spring Security](https://img.shields.io/badge/Spring_Security-6DB33F?style=for-the-badge&logo=spring-security&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white)
+![H2](https://img.shields.io/badge/H2-004088?style=for-the-badge&logo=h2&logoColor=white)
+
+### Frontend
+![Angular](https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+
+---
+
+## 📋 Funcionalidades
+
+- ✅ Autenticação com JWT (login, geração e validação de token)
+- ✅ Cadastro e gerenciamento de **Médicos**
+- ✅ Cadastro e gerenciamento de **Pacientes**
+- ✅ Agendamento e controle de **Consultas**
+- ✅ Tratamento global de exceções
+- ✅ Arquitetura em camadas (Controller → Service → Repository)
+- ✅ Frontend Angular com guards de rota e interceptors HTTP
+
+---
+
+## 🏗️ Arquitetura do Projeto
 
 ```
-src/main/java/com/example/demo/
-├── controller/
-│   ├── AuthController.java
-│   ├── PacienteController.java
-│   ├── MedicoController.java
-│   └── ConsultaController.java
-├── service/
-│   ├── PacienteService.java
-│   ├── MedicoService.java
-│   └── ConsultaService.java
-├── repositories/
-│   ├── UsuarioRepository.java
-│   ├── PacienteRepository.java
-│   ├── MedicoRepository.java
-│   └── ConsultaRepository.java
-├── model/
-│   ├── Usuario.java
-│   ├── Paciente.java
-│   ├── Medico.java
-│   └── Consulta.java
-├── security/
-│   ├── JwtUtil.java
-│   ├── JwtFiltro.java
-│   └── SecurityConfig.java
-└── exception/
-    ├── ErroResposta.java
-    └── GlobalExceptionHandler.java
+src/
+├── controller/        # Endpoints REST (Auth, Médico, Paciente, Consulta)
+├── model/             # Entidades do domínio
+├── repositories/      # Acesso a dados (Spring Data JPA)
+├── service/           # Regras de negócio
+├── security/          # Configuração JWT (JwtFiltro, JwtUtil, SecurityConfig)
+├── exception/         # Handler global de exceções
+└── database/          # Base de usuários em memória
+
+frontend/
+├── src/app/
+│   ├── auth/          # Login + Guard + Interceptor
+│   ├── medicos/       # Módulo de médicos
+│   ├── pacientes/     # Módulo de pacientes
+│   ├── consultas/     # Módulo de consultas
+│   ├── dashboard/     # Painel principal
+│   └── services/      # Serviços HTTP
 ```
 
 ---
 
-## ⚙️ Como rodar o projeto
+## ▶️ Como executar
 
 ### Pré-requisitos
+- Java 17+
+- Maven
+- Node.js 18+ e npm
 
-- Java 21 instalado
-- Maven instalado
-
-### Passos
+### Backend
 
 ```bash
 # Clone o repositório
-git clone https://github.com/seu-usuario/clinica-backend.git
+git clone https://github.com/MatheusHenriquePires/-sistema-clinica
+cd Clinica-API
 
-# Acesse a pasta
-cd clinica-backend
-
-# Suba o servidor
-mvn spring-boot:run
+# Execute com Maven
+./mvnw spring-boot:run
 ```
 
-O servidor vai iniciar em `http://localhost:8080`
+A API estará disponível em `http://localhost:8080`
 
----
+### Frontend
 
-## 📖 Documentação da API
-
-Com o servidor rodando, acesse o Swagger:
-
+```bash
+cd frontend
+npm install
+ng serve
 ```
-http://localhost:8080/swagger-ui.html
-```
+
+O frontend estará disponível em `http://localhost:4200`
 
 ---
 
 ## 🔐 Autenticação
 
-A API usa **JWT**. Para acessar as rotas protegidas:
+A API utiliza **JWT (JSON Web Token)**. Para acessar os endpoints protegidos:
 
-### 1. Criar usuário
-
-```bash
-curl -X POST http://localhost:8080/auth/registrar \
-  -H "Content-Type: application/json" \
-  -d '{"email":"admin@clinica.com","senha":"123456"}'
-```
-
-### 2. Fazer login e obter token
-
-```bash
-curl -X POST http://localhost:8080/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email":"admin@clinica.com","senha":"123456"}'
-```
-
-Resposta:
-```json
-{
-  "token": "eyJhbGciOiJIUzI1NiJ9..."
-}
-```
-
-### 3. Usar o token nas requisições
-
-```bash
-curl -X GET http://localhost:8080/pacientes \
-  -H "Authorization: Bearer SEU_TOKEN_AQUI"
-```
+1. Faça login via `POST /auth/login`
+2. Copie o token retornado
+3. Envie o token no header das requisições: `Authorization: Bearer {token}`
 
 ---
 
-## 📋 Endpoints
-
-### 🔓 Rotas públicas
+## 📡 Endpoints principais
 
 | Método | Rota | Descrição |
 |--------|------|-----------|
-| POST | `/auth/registrar` | Criar novo usuário |
-| POST | `/auth/login` | Autenticar e obter token |
-
-### 🔒 Rotas protegidas (precisam de token)
-
-#### Pacientes
-
-| Método | Rota | Descrição |
-|--------|------|-----------|
-| POST | `/pacientes` | Cadastrar paciente |
-| GET | `/pacientes` | Listar todos |
-| GET | `/pacientes/{id}` | Buscar por ID |
-| DELETE | `/pacientes/{id}` | Deletar paciente |
-
-#### Médicos
-
-| Método | Rota | Descrição |
-|--------|------|-----------|
+| POST | `/auth/login` | Autenticação e geração de token |
+| GET | `/medicos` | Listar médicos |
 | POST | `/medicos` | Cadastrar médico |
-| GET | `/medicos` | Listar todos |
-| GET | `/medicos/{id}` | Buscar por ID |
-| DELETE | `/medicos/{id}` | Deletar médico |
-
-#### Consultas
-
-| Método | Rota | Descrição |
-|--------|------|-----------|
+| PUT | `/medicos/{id}` | Atualizar médico |
+| DELETE | `/medicos/{id}` | Remover médico |
+| GET | `/pacientes` | Listar pacientes |
+| POST | `/pacientes` | Cadastrar paciente |
+| GET | `/consultas` | Listar consultas |
 | POST | `/consultas` | Agendar consulta |
-| GET | `/consultas` | Listar todas |
-| GET | `/consultas/{id}` | Buscar por ID |
-| DELETE | `/consultas/{id}` | Cancelar consulta |
 
 ---
 
-## 📦 Exemplos de requisição
+## 👨‍💻 Autor
 
-### Cadastrar paciente
+**Matheus Henrique**
 
-```bash
-curl -X POST http://localhost:8080/pacientes \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer SEU_TOKEN" \
-  -d '{
-    "nome": "João da Silva",
-    "cpf": "123.456.789-00",
-    "telefone": "(86) 99999-0000",
-    "email": "joao@email.com"
-  }'
-```
-
-### Cadastrar médico
-
-```bash
-curl -X POST http://localhost:8080/medicos \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer SEU_TOKEN" \
-  -d '{
-    "nome": "Dr. Carlos Lima",
-    "crm": "CRM-PI 12345",
-    "especialidade": "Cardiologia",
-    "email": "carlos@clinica.com"
-  }'
-```
-
-### Agendar consulta
-
-```bash
-curl -X POST http://localhost:8080/consultas \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer SEU_TOKEN" \
-  -d '{
-    "pacienteId": 1,
-    "medicoId": 1,
-    "dataHora": "2025-06-10T14:00:00",
-    "motivo": "Dor no peito"
-  }'
-```
-
----
-
-## 🗄️ Banco de dados
-
-O projeto usa **H2** — banco embutido que não precisa de instalação.
-
-Com o servidor rodando, acesse o console visual:
-
-```
-http://localhost:8080/h2-console
-```
-
-| Campo | Valor |
-|-------|-------|
-| JDBC URL | `jdbc:h2:file:./clinicadb` |
-| User | `sa` |
-| Password | *(vazio)* |
-
----
-
-## ✅ Regras de negócio
-
-- Paciente não pode ser cadastrado com CPF duplicado
-- Médico não pode ser cadastrado com CRM duplicado
-- Consulta só pode ser agendada se paciente e médico existirem
-- Nome e CPF do paciente são obrigatórios
-- Nome e CRM do médico são obrigatórios
-- Motivo e data da consulta são obrigatórios
-- Senhas são armazenadas criptografadas com BCrypt
-
----
-
-## 🧱 Arquitetura
-
-O projeto segue a arquitetura em camadas:
-
-```
-Controller → Service → Repository → Model
-```
-
-- **Controller** — recebe as requisições HTTP
-- **Service** — aplica as regras de negócio
-- **Repository** — acessa o banco de dados
-- **Model** — define as entidades
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/matheushenriquepirrs)
+[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/MatheusHenriquePires)
