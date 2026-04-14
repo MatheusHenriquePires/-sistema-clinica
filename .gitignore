@@ -12,6 +12,9 @@ target/
 .settings
 .springBeans
 .sts4-cache
+*.mv.db
+*.trace.db
+*.lock.db
 
 ### IntelliJ IDEA ###
 .idea
