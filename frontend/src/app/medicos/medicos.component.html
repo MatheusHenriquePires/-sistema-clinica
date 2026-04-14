@@ -1,0 +1,94 @@
+<section class="page-header">
+  <div>
+    <p class="eyebrow">Médicos</p>
+    <h1>Equipe médica</h1>
+    <p class="page-copy">Cadastre profissionais e acompanhe os dados da equipe.</p>
+  </div>
+
+  <button class="btn btn-primary" type="button" (click)="showForm = !showForm">
+    {{ showForm ? 'Fechar formulário' : 'Novo médico' }}
+  </button>
+</section>
+
+@if (errorMessage) {
+  <p class="status-message error">{{ errorMessage }}</p>
+}
+
+@if (successMessage) {
+  <p class="status-message success">{{ successMessage }}</p>
+}
+
+@if (showForm) {
+  <section class="panel">
+    <form class="form-grid" [formGroup]="form" (ngSubmit)="submit()">
+      <label class="field">
+        <span>Nome</span>
+        <input type="text" formControlName="nome" />
+      </label>
+
+      <label class="field">
+        <span>CRM</span>
+        <input type="text" formControlName="crm" />
+      </label>
+
+      <label class="field">
+        <span>Especialidade</span>
+        <input type="text" formControlName="especialidade" />
+      </label>
+
+      <label class="field">
+        <span>Email</span>
+        <input type="email" formControlName="email" />
+      </label>
+
+      <button class="btn btn-primary" type="submit" [disabled]="isSaving">
+        {{ isSaving ? 'Salvando...' : 'Cadastrar médico' }}
+      </button>
+    </form>
+  </section>
+}
+
+<section class="panel">
+  @if (isLoading) {
+    <div class="empty-state">
+      <p>Carregando médicos...</p>
+    </div>
+  } @else if (!medicos.length) {
+    <div class="empty-state">
+      <p>Nenhum médico cadastrado até o momento.</p>
+    </div>
+  } @else {
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>CRM</th>
+            <th>Especialidade</th>
+            <th>Email</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (medico of medicos; track trackMedico($index, medico)) {
+            <tr>
+              <td>{{ medico.nome }}</td>
+              <td>{{ medico.crm }}</td>
+              <td>{{ medico.especialidade }}</td>
+              <td>{{ medico.email }}</td>
+              <td>
+                <button
+                  class="btn btn-danger btn-small"
+                  type="button"
+                  (click)="deleteMedico(medico)"
+                >
+                  Deletar
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>

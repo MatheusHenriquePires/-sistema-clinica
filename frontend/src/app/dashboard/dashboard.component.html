@@ -1,0 +1,40 @@
+<section class="page-header">
+  <div>
+    <p class="eyebrow">Dashboard</p>
+    <h1>Visão geral da clínica</h1>
+    <p class="page-copy">
+      Acompanhe os totais principais do sistema e use o menu lateral para gerenciar os cadastros.
+    </p>
+  </div>
+
+  <button class="btn btn-secondary" type="button" (click)="loadStats()">
+    Atualizar dados
+  </button>
+</section>
+
+@if (errorMessage) {
+  <p class="status-message error">{{ errorMessage }}</p>
+}
+
+<section class="stats-grid">
+  <article class="stat-card accent-green">
+    <span>Total de pacientes</span>
+    <strong>{{ stats.pacientes }}</strong>
+  </article>
+
+  <article class="stat-card accent-blue">
+    <span>Total de médicos</span>
+    <strong>{{ stats.medicos }}</strong>
+  </article>
+
+  <article class="stat-card accent-orange">
+    <span>Total de consultas</span>
+    <strong>{{ stats.consultas }}</strong>
+  </article>
+</section>
+
+@if (isLoading) {
+  <div class="empty-state">
+    <p>Carregando indicadores...</p>
+  </div>
+}

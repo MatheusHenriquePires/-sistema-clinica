@@ -1,0 +1,29 @@
+<div class="shell">
+  <aside class="sidebar">
+    <div>
+      <p class="brand-kicker">Painel da Clínica</p>
+      <h2>MedFlow</h2>
+      <p class="brand-copy">Controle pacientes, médicos e consultas em um só lugar.</p>
+    </div>
+
+    <nav class="nav-list">
+      @for (item of navItems; track item.path) {
+        <a
+          [routerLink]="item.path"
+          routerLinkActive="active"
+          class="nav-link"
+        >
+          {{ item.label }}
+        </a>
+      }
+    </nav>
+
+    <button class="btn btn-secondary sidebar-btn" type="button" (click)="logout()">
+      Sair
+    </button>
+  </aside>
+
+  <main class="content">
+    <router-outlet />
+  </main>
+</div>

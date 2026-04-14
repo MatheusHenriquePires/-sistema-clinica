@@ -1,0 +1,42 @@
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.stat-card {
+  padding: 24px;
+  border-radius: 24px;
+  color: white;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+}
+
+.stat-card span {
+  display: block;
+  font-size: 0.95rem;
+  opacity: 0.86;
+}
+
+.stat-card strong {
+  display: block;
+  margin-top: 12px;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+}
+
+.accent-green {
+  background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+}
+
+.accent-blue {
+  background: linear-gradient(135deg, #0ea5e9 0%, #1d4ed8 100%);
+}
+
+.accent-orange {
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+}
+
+@media (max-width: 900px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
