@@ -1,20 +1,42 @@
 <section class="auth-page">
   <div class="auth-panel">
     <div class="auth-copy">
-      <span class="eyebrow">Clínica Médica</span>
-      <h1>Gestão simples para pacientes, médicos e consultas.</h1>
+      <span class="eyebrow">Acesso ao Sistema</span>
+      <h1>Sistema de gestão da clínica</h1>
       <p>
-        Faça login para acessar o dashboard ou crie um usuário para começar a
-        usar a API local em <strong>http://localhost:8080</strong>.
+        Faça login para acessar o painel administrativo e gerenciar pacientes,
+        médicos e consultas da clínica.
       </p>
-      <ul>
-        <li>Autenticação com JWT e rotas protegidas</li>
-        <li>Cadastro e remoção de registros com feedback visual</li>
-        <li>Painel responsivo com navegação lateral</li>
-      </ul>
+
+      <div class="auth-info-grid">
+        <div class="info-box">
+          <strong>Pacientes</strong>
+          <span>Cadastro e consulta de dados</span>
+        </div>
+
+        <div class="info-box">
+          <strong>Médicos</strong>
+          <span>Equipe, CRM e especialidades</span>
+        </div>
+
+        <div class="info-box">
+          <strong>Consultas</strong>
+          <span>Agenda e gerenciamento de atendimento</span>
+        </div>
+      </div>
     </div>
 
     <div class="auth-card">
+      <div class="auth-card-top">
+        <p class="auth-card-kicker">Autenticação</p>
+        <h2>{{ isRegisterMode ? 'Registrar usuário' : 'Entrar no sistema' }}</h2>
+        <p>
+          {{ isRegisterMode
+            ? 'Crie um usuário para liberar o acesso ao ambiente administrativo.'
+            : 'Informe suas credenciais para acessar o painel da clínica.' }}
+        </p>
+      </div>
+
       <div class="auth-tabs">
         <button
           type="button"
@@ -46,28 +68,36 @@
         <form [formGroup]="loginForm" (ngSubmit)="submitLogin()">
           <label class="field">
             <span>Email</span>
-            <input type="email" formControlName="email" placeholder="voce@email.com" />
+            <input
+              type="email"
+              formControlName="email"
+              placeholder="usuario@clinica.com"
+            />
           </label>
 
           <label class="field">
             <span>Senha</span>
-            <input type="password" formControlName="senha" placeholder="Sua senha" />
+            <input type="password" formControlName="senha" placeholder="Digite sua senha" />
           </label>
 
           <button class="btn btn-primary full-width" type="submit" [disabled]="isLoading">
-            {{ isLoading ? 'Entrando...' : 'Acessar sistema' }}
+            {{ isLoading ? 'Entrando...' : 'Entrar' }}
           </button>
         </form>
       } @else {
         <form [formGroup]="registerForm" (ngSubmit)="submitRegister()">
           <label class="field">
             <span>Email</span>
-            <input type="email" formControlName="email" placeholder="voce@email.com" />
+            <input
+              type="email"
+              formControlName="email"
+              placeholder="novo.usuario@clinica.com"
+            />
           </label>
 
           <label class="field">
             <span>Senha</span>
-            <input type="password" formControlName="senha" placeholder="Crie uma senha" />
+            <input type="password" formControlName="senha" placeholder="Defina uma senha" />
           </label>
 
           <button
@@ -75,7 +105,7 @@
             type="submit"
             [disabled]="registerLoading"
           >
-            {{ registerLoading ? 'Registrando...' : 'Criar usuário' }}
+            {{ registerLoading ? 'Registrando...' : 'Registrar usuário' }}
           </button>
         </form>
       }

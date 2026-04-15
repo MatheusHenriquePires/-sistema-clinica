@@ -15,10 +15,10 @@ export class ShellComponent {
   private readonly router = inject(Router);
 
   protected readonly navItems = [
-    { label: 'Dashboard', path: '/dashboard' },
-    { label: 'Pacientes', path: '/pacientes' },
-    { label: 'Médicos', path: '/medicos' },
-    { label: 'Consultas', path: '/consultas' },
+    { label: 'Dashboard', path: '/dashboard', caption: 'Resumo operacional' },
+    { label: 'Pacientes', path: '/pacientes', caption: 'Cadastro e contato' },
+    { label: 'Médicos', path: '/medicos', caption: 'Equipe e especialidades' },
+    { label: 'Consultas', path: '/consultas', caption: 'Agenda de atendimento' },
   ];
 
   protected logout(): void {

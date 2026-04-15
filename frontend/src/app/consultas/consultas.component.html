@@ -1,9 +1,9 @@
 <section class="page-header">
   <div>
     <p class="eyebrow">Consultas</p>
-    <h1>Agenda médica</h1>
+    <h1>Agenda de consultas</h1>
     <p class="page-copy">
-      Agende novas consultas escolhendo paciente, médico, data e motivo.
+      Gerencie os agendamentos entre pacientes e médicos no calendário operacional da clínica.
     </p>
   </div>
 
@@ -20,8 +20,37 @@
   <p class="status-message success">{{ successMessage }}</p>
 }
 
+<section class="summary-band">
+  <article class="summary-card">
+    <span>Total de consultas</span>
+    <strong>{{ consultas.length }}</strong>
+    <p>Quantidade de atendimentos cadastrados na agenda.</p>
+  </article>
+
+  <article class="summary-card">
+    <span>Pacientes disponíveis</span>
+    <strong>{{ pacientes.length }}</strong>
+    <p>Pacientes que podem ser vinculados a novos agendamentos.</p>
+  </article>
+
+  <article class="summary-card">
+    <span>Médicos disponíveis</span>
+    <strong>{{ medicos.length }}</strong>
+    <p>Profissionais disponíveis para composição da agenda.</p>
+  </article>
+</section>
+
 <section class="panel">
-  <h2 class="panel-title">Agendar consulta</h2>
+  <div class="panel-top">
+    <div>
+      <h2 class="panel-title">Agendar consulta</h2>
+      <p class="panel-copy">
+        Informe paciente, médico, data e motivo do atendimento.
+      </p>
+    </div>
+
+    <span class="panel-badge">AG</span>
+  </div>
 
   <form class="form-grid form-grid-wide" [formGroup]="form" (ngSubmit)="submit()">
     <label class="field">
@@ -61,15 +90,28 @@
 </section>
 
 <section class="panel">
-  <h2 class="panel-title">Consultas cadastradas</h2>
+  <div class="section-header">
+    <div>
+      <h2>Consultas cadastradas</h2>
+      <p>Lista dos agendamentos registrados no sistema.</p>
+    </div>
+
+    <span class="data-pill">{{ consultas.length }} consulta(s)</span>
+  </div>
 
   @if (isLoading) {
     <div class="empty-state">
-      <p>Carregando consultas...</p>
+      <div>
+        <strong>Carregando agenda</strong>
+        <p>Buscando os agendamentos cadastrados.</p>
+      </div>
     </div>
   } @else if (!consultas.length) {
     <div class="empty-state">
-      <p>Nenhuma consulta cadastrada até o momento.</p>
+      <div>
+        <strong>Nenhuma consulta cadastrada</strong>
+        <p>Use o formulário para registrar a primeira consulta.</p>
+      </div>
     </div>
   } @else {
     <div class="table-wrapper">
@@ -86,8 +128,14 @@
         <tbody>
           @for (consulta of consultas; track trackConsulta($index, consulta)) {
             <tr>
-              <td>{{ pacienteNome(consulta.pacienteId) }}</td>
-              <td>{{ medicoNome(consulta.medicoId) }}</td>
+              <td>
+                <span class="table-primary">{{ pacienteNome(consulta.pacienteId) }}</span>
+                <span class="table-secondary">Paciente vinculado</span>
+              </td>
+              <td>
+                <span class="table-primary">{{ medicoNome(consulta.medicoId) }}</span>
+                <span class="table-secondary">Médico responsável</span>
+              </td>
               <td>{{ consulta.dataHora | date: 'dd/MM/yyyy HH:mm' }}</td>
               <td>{{ consulta.motivo }}</td>
               <td>

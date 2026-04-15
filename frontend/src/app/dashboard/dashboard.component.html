@@ -1,9 +1,9 @@
 <section class="page-header">
   <div>
     <p class="eyebrow">Dashboard</p>
-    <h1>Visão geral da clínica</h1>
+    <h1>Painel geral da clínica</h1>
     <p class="page-copy">
-      Acompanhe os totais principais do sistema e use o menu lateral para gerenciar os cadastros.
+      Acompanhe os números principais do sistema e use o menu lateral para acessar os módulos de cadastro e agenda.
     </p>
   </div>
 
@@ -17,24 +17,30 @@
 }
 
 <section class="stats-grid">
-  <article class="stat-card accent-green">
-    <span>Total de pacientes</span>
+  <article class="stat-card">
+    <span>Pacientes</span>
     <strong>{{ stats.pacientes }}</strong>
+    <p>Total de pacientes cadastrados no sistema.</p>
   </article>
 
-  <article class="stat-card accent-blue">
-    <span>Total de médicos</span>
+  <article class="stat-card">
+    <span>Médicos</span>
     <strong>{{ stats.medicos }}</strong>
+    <p>Total de profissionais registrados na clínica.</p>
   </article>
 
-  <article class="stat-card accent-orange">
-    <span>Total de consultas</span>
+  <article class="stat-card">
+    <span>Consultas</span>
     <strong>{{ stats.consultas }}</strong>
+    <p>Total de consultas registradas na agenda.</p>
   </article>
 </section>
 
 @if (isLoading) {
   <div class="empty-state">
-    <p>Carregando indicadores...</p>
+    <div>
+      <strong>Carregando indicadores</strong>
+      <p>Buscando os dados para compor o panorama geral da clínica.</p>
+    </div>
   </div>
 }

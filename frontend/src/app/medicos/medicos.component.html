@@ -1,8 +1,10 @@
 <section class="page-header">
   <div>
     <p class="eyebrow">Médicos</p>
-    <h1>Equipe médica</h1>
-    <p class="page-copy">Cadastre profissionais e acompanhe os dados da equipe.</p>
+    <h1>Cadastro de médicos</h1>
+    <p class="page-copy">
+      Gerencie os profissionais, especialidades e informações de contato da equipe médica.
+    </p>
   </div>
 
   <button class="btn btn-primary" type="button" (click)="showForm = !showForm">
@@ -18,27 +20,58 @@
   <p class="status-message success">{{ successMessage }}</p>
 }
 
+<section class="summary-band">
+  <article class="summary-card">
+    <span>Total de médicos</span>
+    <strong>{{ medicos.length }}</strong>
+    <p>Profissionais disponíveis na base cadastral da clínica.</p>
+  </article>
+
+  <article class="summary-card">
+    <span>Identificação</span>
+    <strong>CRM e contato</strong>
+    <p>Dados principais para conferência e agendamento.</p>
+  </article>
+
+  <article class="summary-card">
+    <span>Status do módulo</span>
+    <strong>Ativo</strong>
+    <p>Cadastro habilitado para inclusão e remoção de profissionais.</p>
+  </article>
+</section>
+
 @if (showForm) {
   <section class="panel">
+    <div class="panel-top">
+      <div>
+        <h2 class="panel-title">Cadastrar médico</h2>
+        <p class="panel-copy">
+          Preencha os dados do profissional para registro no sistema.
+        </p>
+      </div>
+
+      <span class="panel-badge">MD</span>
+    </div>
+
     <form class="form-grid" [formGroup]="form" (ngSubmit)="submit()">
       <label class="field">
         <span>Nome</span>
-        <input type="text" formControlName="nome" />
+        <input type="text" formControlName="nome" placeholder="Nome do profissional" />
       </label>
 
       <label class="field">
         <span>CRM</span>
-        <input type="text" formControlName="crm" />
+        <input type="text" formControlName="crm" placeholder="CRM/UF 00000" />
       </label>
 
       <label class="field">
         <span>Especialidade</span>
-        <input type="text" formControlName="especialidade" />
+        <input type="text" formControlName="especialidade" placeholder="Cardiologia, clínica geral..." />
       </label>
 
       <label class="field">
         <span>Email</span>
-        <input type="email" formControlName="email" />
+        <input type="email" formControlName="email" placeholder="medico@clinicalumiere.com" />
       </label>
 
       <button class="btn btn-primary" type="submit" [disabled]="isSaving">
@@ -49,13 +82,28 @@
 }
 
 <section class="panel">
+  <div class="section-header">
+    <div>
+      <h2>Equipe cadastrada</h2>
+      <p>Lista dos médicos cadastrados com CRM, especialidade e contato.</p>
+    </div>
+
+    <span class="data-pill">{{ medicos.length }} profissional(is)</span>
+  </div>
+
   @if (isLoading) {
     <div class="empty-state">
-      <p>Carregando médicos...</p>
+      <div>
+        <strong>Carregando equipe médica</strong>
+        <p>Buscando os profissionais cadastrados.</p>
+      </div>
     </div>
   } @else if (!medicos.length) {
     <div class="empty-state">
-      <p>Nenhum médico cadastrado até o momento.</p>
+      <div>
+        <strong>Nenhum médico cadastrado</strong>
+        <p>Use o formulário para adicionar o primeiro médico.</p>
+      </div>
     </div>
   } @else {
     <div class="table-wrapper">
@@ -72,7 +120,10 @@
         <tbody>
           @for (medico of medicos; track trackMedico($index, medico)) {
             <tr>
-              <td>{{ medico.nome }}</td>
+              <td>
+                <span class="table-primary">{{ medico.nome }}</span>
+                <span class="table-secondary">Profissional cadastrado</span>
+              </td>
               <td>{{ medico.crm }}</td>
               <td>{{ medico.especialidade }}</td>
               <td>{{ medico.email }}</td>

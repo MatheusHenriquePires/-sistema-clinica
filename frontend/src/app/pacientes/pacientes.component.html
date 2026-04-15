@@ -2,7 +2,9 @@
   <div>
     <p class="eyebrow">Pacientes</p>
     <h1>Cadastro de pacientes</h1>
-    <p class="page-copy">Gerencie os dados dos pacientes vinculados à clínica.</p>
+    <p class="page-copy">
+      Gerencie os dados cadastrais dos pacientes atendidos pela clínica.
+    </p>
   </div>
 
   <button class="btn btn-primary" type="button" (click)="showForm = !showForm">
@@ -18,27 +20,58 @@
   <p class="status-message success">{{ successMessage }}</p>
 }
 
+<section class="summary-band">
+  <article class="summary-card">
+    <span>Total de pacientes</span>
+    <strong>{{ pacientes.length }}</strong>
+    <p>Quantidade de registros disponíveis para atendimento.</p>
+  </article>
+
+  <article class="summary-card">
+    <span>Documentação</span>
+    <strong>CPF e contato</strong>
+    <p>Dados essenciais para recepção e conferência cadastral.</p>
+  </article>
+
+  <article class="summary-card">
+    <span>Status do módulo</span>
+    <strong>Ativo</strong>
+    <p>Cadastro disponível para inclusão e remoção de pacientes.</p>
+  </article>
+</section>
+
 @if (showForm) {
   <section class="panel">
+    <div class="panel-top">
+      <div>
+        <h2 class="panel-title">Cadastrar paciente</h2>
+        <p class="panel-copy">
+          Preencha os dados básicos do paciente para registro no sistema.
+        </p>
+      </div>
+
+      <span class="panel-badge">PF</span>
+    </div>
+
     <form class="form-grid" [formGroup]="form" (ngSubmit)="submit()">
       <label class="field">
         <span>Nome</span>
-        <input type="text" formControlName="nome" />
+        <input type="text" formControlName="nome" placeholder="Nome completo do paciente" />
       </label>
 
       <label class="field">
         <span>CPF</span>
-        <input type="text" formControlName="cpf" />
+        <input type="text" formControlName="cpf" placeholder="000.000.000-00" />
       </label>
 
       <label class="field">
         <span>Telefone</span>
-        <input type="text" formControlName="telefone" />
+        <input type="text" formControlName="telefone" placeholder="(00) 00000-0000" />
       </label>
 
       <label class="field">
         <span>Email</span>
-        <input type="email" formControlName="email" />
+        <input type="email" formControlName="email" placeholder="paciente@email.com" />
       </label>
 
       <button class="btn btn-primary" type="submit" [disabled]="isSaving">
@@ -49,13 +82,28 @@
 }
 
 <section class="panel">
+  <div class="section-header">
+    <div>
+      <h2>Pacientes registrados</h2>
+      <p>Lista completa de pacientes cadastrados no sistema.</p>
+    </div>
+
+    <span class="data-pill">{{ pacientes.length }} registro(s)</span>
+  </div>
+
   @if (isLoading) {
     <div class="empty-state">
-      <p>Carregando pacientes...</p>
+      <div>
+        <strong>Carregando pacientes</strong>
+        <p>Buscando os registros disponíveis.</p>
+      </div>
     </div>
   } @else if (!pacientes.length) {
     <div class="empty-state">
-      <p>Nenhum paciente cadastrado até o momento.</p>
+      <div>
+        <strong>Nenhum paciente cadastrado</strong>
+        <p>Use o formulário para adicionar o primeiro paciente.</p>
+      </div>
     </div>
   } @else {
     <div class="table-wrapper">
@@ -72,7 +120,10 @@
         <tbody>
           @for (paciente of pacientes; track trackPaciente($index, paciente)) {
             <tr>
-              <td>{{ paciente.nome }}</td>
+              <td>
+                <span class="table-primary">{{ paciente.nome }}</span>
+                <span class="table-secondary">Registro cadastrado</span>
+              </td>
               <td>{{ paciente.cpf }}</td>
               <td>{{ paciente.telefone }}</td>
               <td>{{ paciente.email }}</td>
