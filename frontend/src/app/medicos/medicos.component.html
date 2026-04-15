@@ -1,94 +1,195 @@
-<section class="page-header">
-  <div>
-    <p class="eyebrow">Médicos</p>
-    <h1>Equipe médica</h1>
-    <p class="page-copy">Cadastre profissionais e acompanhe os dados da equipe.</p>
+<div class="page-container">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">Médicos</h1>
+      <p class="page-subtitle">Gestão da equipe médica</p>
+    </div>
+    <button
+      class="btn btn-primary"
+      type="button"
+      (click)="showForm = !showForm"
+      [class.active]="showForm"
+    >
+      <span class="btn-icon">{{ showForm ? '✕' : '+' }}</span>
+      <span class="btn-text">{{ showForm ? 'Fechar Formulário' : 'Novo Médico' }}</span>
+    </button>
   </div>
 
-  <button class="btn btn-primary" type="button" (click)="showForm = !showForm">
-    {{ showForm ? 'Fechar formulário' : 'Novo médico' }}
-  </button>
-</section>
-
-@if (errorMessage) {
-  <p class="status-message error">{{ errorMessage }}</p>
-}
-
-@if (successMessage) {
-  <p class="status-message success">{{ successMessage }}</p>
-}
-
-@if (showForm) {
-  <section class="panel">
-    <form class="form-grid" [formGroup]="form" (ngSubmit)="submit()">
-      <label class="field">
-        <span>Nome</span>
-        <input type="text" formControlName="nome" />
-      </label>
-
-      <label class="field">
-        <span>CRM</span>
-        <input type="text" formControlName="crm" />
-      </label>
-
-      <label class="field">
-        <span>Especialidade</span>
-        <input type="text" formControlName="especialidade" />
-      </label>
-
-      <label class="field">
-        <span>Email</span>
-        <input type="email" formControlName="email" />
-      </label>
-
-      <button class="btn btn-primary" type="submit" [disabled]="isSaving">
-        {{ isSaving ? 'Salvando...' : 'Cadastrar médico' }}
-      </button>
-    </form>
-  </section>
-}
-
-<section class="panel">
-  @if (isLoading) {
-    <div class="empty-state">
-      <p>Carregando médicos...</p>
-    </div>
-  } @else if (!medicos.length) {
-    <div class="empty-state">
-      <p>Nenhum médico cadastrado até o momento.</p>
-    </div>
-  } @else {
-    <div class="table-wrapper">
-      <table>
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>CRM</th>
-            <th>Especialidade</th>
-            <th>Email</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (medico of medicos; track trackMedico($index, medico)) {
-            <tr>
-              <td>{{ medico.nome }}</td>
-              <td>{{ medico.crm }}</td>
-              <td>{{ medico.especialidade }}</td>
-              <td>{{ medico.email }}</td>
-              <td>
-                <button
-                  class="btn btn-danger btn-small"
-                  type="button"
-                  (click)="deleteMedico(medico)"
-                >
-                  Deletar
-                </button>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
+  <!-- Alerts -->
+  @if (errorMessage) {
+    <div class="alert alert-error">
+      <span class="alert-icon">!</span>
+      <div class="alert-content">
+        <p class="alert-title">Erro</p>
+        <p class="alert-message">{{ errorMessage }}</p>
+      </div>
+      <button class="alert-close" type="button" (click)="errorMessage = ''">✕</button>
     </div>
   }
-</section>
+
+  @if (successMessage) {
+    <div class="alert alert-success">
+      <span class="alert-icon">✓</span>
+      <div class="alert-content">
+        <p class="alert-title">Sucesso</p>
+        <p class="alert-message">{{ successMessage }}</p>
+      </div>
+      <button class="alert-close" type="button" (click)="successMessage = ''">✕</button>
+    </div>
+  }
+
+  <!-- Form Section -->
+  @if (showForm) {
+    <div class="form-section">
+      <h3 class="form-title">Novo Médico</h3>
+      <form class="form-grid" [formGroup]="form" (ngSubmit)="submit()">
+        <div class="form-group">
+          <label class="form-label">Nome Completo <span class="required">*</span></label>
+          <div class="form-input-wrapper">
+            <span class="input-icon">M</span>
+            <input
+              type="text"
+              formControlName="nome"
+              class="form-input"
+              placeholder="Dr. João Silva"
+              required
+            />
+          </div>
+          @if (form.get('nome')?.invalid && form.get('nome')?.touched) {
+            <span class="form-error">Nome é obrigatório</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">CRM <span class="required">*</span></label>
+          <div class="form-input-wrapper">
+            <span class="input-icon">#</span>
+            <input
+              type="text"
+              formControlName="crm"
+              class="form-input"
+              placeholder="000000/SP"
+              required
+            />
+          </div>
+          @if (form.get('crm')?.invalid && form.get('crm')?.touched) {
+            <span class="form-error">CRM é obrigatório</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Especialidade <span class="required">*</span></label>
+          <div class="form-input-wrapper">
+            <span class="input-icon">S</span>
+            <input
+              type="text"
+              formControlName="especialidade"
+              class="form-input"
+              placeholder="Cardiologia, Dermatologia, etc"
+              required
+            />
+          </div>
+          @if (form.get('especialidade')?.invalid && form.get('especialidade')?.touched) {
+            <span class="form-error">Especialidade é obrigatória</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Email <span class="required">*</span></label>
+          <div class="form-input-wrapper">
+            <span class="input-icon">&#64;</span>
+            <input
+              type="email"
+              formControlName="email"
+              class="form-input"
+              placeholder="medico@clinic.com"
+              required
+            />
+          </div>
+          @if (form.get('email')?.invalid && form.get('email')?.touched) {
+            <span class="form-error">Email válido é obrigatório</span>
+          }
+        </div>
+
+        <button
+          class="btn btn-submit"
+          type="submit"
+          [disabled]="isSaving || form.invalid"
+        >
+          @if (isSaving) {
+            <span class="btn-spinner"></span>
+            <span class="btn-text">Salvando...</span>
+          } @else {
+            <span class="btn-text">Cadastrar Médico</span>
+          }
+        </button>
+      </form>
+    </div>
+  }
+
+  <!-- Table Section -->
+  <div class="table-section">
+    <div class="table-header">
+      <h3 class="table-title">Lista de Médicos</h3>
+      <span class="table-count">{{ medicos.length }} médico(s)</span>
+    </div>
+
+    @if (isLoading) {
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <p class="loading-text">Carregando médicos...</p>
+      </div>
+    } @else if (!medicos.length) {
+      <div class="empty-state">
+        <span class="empty-icon">M</span>
+        <p class="empty-title">Nenhum médico cadastrado</p>
+        <p class="empty-text">Clique em "Novo Médico" para começar a adicionar médicos ao sistema.</p>
+      </div>
+    } @else {
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th class="col-name">Nome</th>
+              <th class="col-crm">CRM</th>
+              <th class="col-specialty">Especialidade</th>
+              <th class="col-email">Email</th>
+              <th class="col-actions">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (medico of medicos; track trackMedico($index, medico)) {
+              <tr class="table-row">
+                <td class="col-name">
+                  <span class="row-badge">M</span>
+                  <span class="row-text">{{ medico.nome }}</span>
+                </td>
+                <td class="col-crm">
+                  <code class="code-text">{{ medico.crm }}</code>
+                </td>
+                <td class="col-specialty">
+                  <span class="specialty-badge">{{ medico.especialidade }}</span>
+                </td>
+                <td class="col-email">
+                  <a href="mailto:{{ medico.email }}" class="email-link">{{ medico.email }}</a>
+                </td>
+                <td class="col-actions">
+                  <button
+                    class="btn btn-delete"
+                    type="button"
+                    (click)="deleteMedico(medico)"
+                    title="Deletar médico"
+                  >
+                    <span class="btn-icon">-</span>
+                    <span class="btn-label">Deletar</span>
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+</div>

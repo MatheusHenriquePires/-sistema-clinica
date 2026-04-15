@@ -1,40 +1,92 @@
-<section class="page-header">
-  <div>
-    <p class="eyebrow">Dashboard</p>
-    <h1>Visão geral da clínica</h1>
-    <p class="page-copy">
-      Acompanhe os totais principais do sistema e use o menu lateral para gerenciar os cadastros.
-    </p>
+<div class="dashboard-container">
+  <!-- Header -->
+  <div class="dashboard-header">
+    <div class="header-content">
+      <h1 class="page-title">Dashboard</h1>
+      <p class="page-subtitle">Visão geral e indicadores da clínica médica</p>
+    </div>
+    <button class="btn btn-refresh" (click)="loadStats()" [disabled]="isLoading" title="Atualizar dados">
+      <span class="refresh-icon">⟳</span>
+      <span class="refresh-text">Atualizar</span>
+    </button>
   </div>
 
-  <button class="btn btn-secondary" type="button" (click)="loadStats()">
-    Atualizar dados
-  </button>
-</section>
+  <!-- Error Message -->
+  @if (errorMessage) {
+    <div class="alert alert-error">
+      <span class="alert-icon">!</span>
+      <div class="alert-content">
+        <p class="alert-title">Erro ao carregar dados</p>
+        <p class="alert-message">{{ errorMessage }}</p>
+      </div>
+      <button class="alert-close" (click)="errorMessage = ''" type="button">✕</button>
+    </div>
+  }
 
-@if (errorMessage) {
-  <p class="status-message error">{{ errorMessage }}</p>
-}
+  <!-- Loading State -->
+  @if (isLoading) {
+    <div class="loading-container">
+      <div class="spinner"></div>
+      <p class="loading-text">Carregando indicadores...</p>
+    </div>
+  } @else {
+    <!-- Stats Cards Grid -->
+    <div class="stats-grid">
+      <!-- Pacientes Card -->
+      <article class="stat-card card-patients">
+        <div class="card-header">
+          <div class="card-icon">P</div>
+          <h3 class="card-title">Pacientes</h3>
+        </div>
+        <div class="card-body">
+          <p class="card-value">{{ stats.pacientes }}</p>
+          <p class="card-label">Total de pacientes cadastrados</p>
+        </div>
+        <div class="card-footer">
+          <span class="card-badge badge-info">Sistema</span>
+        </div>
+      </article>
 
-<section class="stats-grid">
-  <article class="stat-card accent-green">
-    <span>Total de pacientes</span>
-    <strong>{{ stats.pacientes }}</strong>
-  </article>
+      <!-- Médicos Card -->
+      <article class="stat-card card-doctors">
+        <div class="card-header">
+          <div class="card-icon">M</div>
+          <h3 class="card-title">Médicos</h3>
+        </div>
+        <div class="card-body">
+          <p class="card-value">{{ stats.medicos }}</p>
+          <p class="card-label">Total de médicos cadastrados</p>
+        </div>
+        <div class="card-footer">
+          <span class="card-badge badge-success">Ativo</span>
+        </div>
+      </article>
 
-  <article class="stat-card accent-blue">
-    <span>Total de médicos</span>
-    <strong>{{ stats.medicos }}</strong>
-  </article>
+      <!-- Consultas Card -->
+      <article class="stat-card card-appointments">
+        <div class="card-header">
+          <div class="card-icon">C</div>
+          <h3 class="card-title">Consultas</h3>
+        </div>
+        <div class="card-body">
+          <p class="card-value">{{ stats.consultas }}</p>
+          <p class="card-label">Total de consultas agendadas</p>
+        </div>
+        <div class="card-footer">
+          <span class="card-badge badge-warning">Pendentes</span>
+        </div>
+      </article>
+    </div>
 
-  <article class="stat-card accent-orange">
-    <span>Total de consultas</span>
-    <strong>{{ stats.consultas }}</strong>
-  </article>
-</section>
-
-@if (isLoading) {
-  <div class="empty-state">
-    <p>Carregando indicadores...</p>
-  </div>
-}
+    <!-- Info Box -->
+    <div class="info-box">
+      <div class="info-icon">i</div>
+      <div class="info-content">
+        <p class="info-title">Bem-vindo ao MedFlow</p>
+        <p class="info-text">
+          Use o menu lateral para gerenciar pacientes, médicos e consultas. Os indicadores acima mostram o status atual do sistema.
+        </p>
+      </div>
+    </div>
+  }
+</div>

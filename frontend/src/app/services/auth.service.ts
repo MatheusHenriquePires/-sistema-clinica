@@ -9,12 +9,16 @@ export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = environment.apiUrl;
   private readonly tokenKey = 'clinica_token';
+  private readonly emailKey = 'clinica_email';
 
   login(payload: LoginPayload): Observable<void> {
     return this.http
       .post<LoginResponse>(`${this.apiUrl}/auth/login`, payload)
       .pipe(
-        tap((response) => localStorage.setItem(this.tokenKey, response.token)),
+        tap((response) => {
+          localStorage.setItem(this.tokenKey, response.token);
+          localStorage.setItem(this.emailKey, payload.email);
+        }),
         map(() => void 0),
       );
   }
@@ -22,15 +26,24 @@ export class AuthService {
   registrar(payload: RegisterPayload): Observable<string> {
     return this.http.post(`${this.apiUrl}/auth/registrar`, payload, {
       responseType: 'text',
-    });
+    }).pipe(
+      tap(() => {
+        localStorage.setItem(this.emailKey, payload.email);
+      }),
+    );
   }
 
   logout(): void {
     localStorage.removeItem(this.tokenKey);
+    localStorage.removeItem(this.emailKey);
   }
 
   getToken(): string | null {
     return localStorage.getItem(this.tokenKey);
+  }
+
+  getStoredEmail(): string | null {
+    return localStorage.getItem(this.emailKey);
   }
 
   isAuthenticated(): boolean {

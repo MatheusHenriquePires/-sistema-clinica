@@ -1,29 +1,74 @@
 <div class="shell">
-  <aside class="sidebar">
-    <div>
-      <p class="brand-kicker">Painel da Clínica</p>
-      <h2>MedFlow</h2>
-      <p class="brand-copy">Controle pacientes, médicos e consultas em um só lugar.</p>
+  <!-- Sidebar -->
+  <aside class="sidebar" [class.collapsed]="!isSidebarOpen">
+    <!-- Logo/Brand -->
+    <div class="sidebar-header">
+      <div class="logo-container">
+        <div class="logo-icon">HC</div>
+        <div *ngIf="isSidebarOpen" class="logo-text">
+          <h1 class="logo-title">MedFlow</h1>
+          <p class="logo-subtitle">Clínica Médica</p>
+        </div>
+      </div>
     </div>
 
-    <nav class="nav-list">
+    <!-- Navigation -->
+    <nav class="sidebar-nav">
       @for (item of navItems; track item.path) {
         <a
           [routerLink]="item.path"
           routerLinkActive="active"
-          class="nav-link"
+          class="nav-item"
+          [title]="item.label"
         >
-          {{ item.label }}
+          <span class="nav-icon">{{ item.icon }}</span>
+          <span *ngIf="isSidebarOpen" class="nav-label">{{ item.label }}</span>
         </a>
       }
     </nav>
 
-    <button class="btn btn-secondary sidebar-btn" type="button" (click)="logout()">
-      Sair
-    </button>
+    <!-- User & Logout -->
+    <div class="sidebar-footer">
+      <div class="user-info" *ngIf="isSidebarOpen">
+        <div class="user-avatar">U</div>
+        <div class="user-details">
+          <p class="user-email">{{ userEmail }}</p>
+          <p class="user-role">Administrador</p>
+        </div>
+      </div>
+      <button class="btn-logout" (click)="logout()" [title]="isSidebarOpen ? '' : 'Sair'">
+        <span class="logout-icon">→</span>
+        <span *ngIf="isSidebarOpen" class="logout-text">Sair</span>
+      </button>
+    </div>
   </aside>
 
-  <main class="content">
-    <router-outlet />
-  </main>
+  <!-- Main Content -->
+  <div class="main-wrapper">
+    <!-- Header -->
+    <header class="header">
+      <button class="btn-toggle-sidebar" (click)="toggleSidebar()" title="Toggle Sidebar">
+        <span class="hamburger">☰</span>
+      </button>
+      
+      <div class="header-center">
+        <h2 class="header-title">Gestão de Clínica Médica</h2>
+      </div>
+
+      <div class="header-right">
+        <div class="header-user">
+          <span class="user-avatar-small">U</span>
+          <div *ngIf="isSidebarOpen === false" class="header-user-info">
+            <p class="header-user-email">{{ userEmail }}</p>
+            <p class="header-user-role">Administrador</p>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content Area -->
+    <main class="content">
+      <router-outlet />
+    </main>
+  </div>
 </div>

@@ -14,12 +14,19 @@ export class ShellComponent {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
 
+  protected isSidebarOpen = true;
+  protected userEmail = this.authService.getStoredEmail() || 'Usuário';
+
   protected readonly navItems = [
-    { label: 'Dashboard', path: '/dashboard' },
-    { label: 'Pacientes', path: '/pacientes' },
-    { label: 'Médicos', path: '/medicos' },
-    { label: 'Consultas', path: '/consultas' },
+    { label: 'Dashboard', path: '/dashboard', icon: '≡' },
+    { label: 'Pacientes', path: '/pacientes', icon: 'P' },
+    { label: 'Médicos', path: '/medicos', icon: '⚕' },
+    { label: 'Consultas', path: '/consultas', icon: '⊞' },
   ];
+
+  protected toggleSidebar(): void {
+    this.isSidebarOpen = !this.isSidebarOpen;
+  }
 
   protected logout(): void {
     this.authService.logout();

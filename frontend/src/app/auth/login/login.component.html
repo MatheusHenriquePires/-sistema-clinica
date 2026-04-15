@@ -1,84 +1,194 @@
-<section class="auth-page">
-  <div class="auth-panel">
-    <div class="auth-copy">
-      <span class="eyebrow">Clínica Médica</span>
-      <h1>Gestão simples para pacientes, médicos e consultas.</h1>
-      <p>
-        Faça login para acessar o dashboard ou crie um usuário para começar a
-        usar a API local em <strong>http://localhost:8080</strong>.
-      </p>
-      <ul>
-        <li>Autenticação com JWT e rotas protegidas</li>
-        <li>Cadastro e remoção de registros com feedback visual</li>
-        <li>Painel responsivo com navegação lateral</li>
-      </ul>
+<div class="auth-page">
+  <div class="auth-container">
+    <!-- Left Panel - Information -->
+    <div class="auth-info">
+      <div class="info-content">
+        <div class="logo-section">
+          <div class="logo-icon-large">HC</div>
+          <h1 class="system-title">MedFlow</h1>
+          <p class="system-subtitle">Gestão Hospitalar Integrada</p>
+        </div>
+
+        <div class="info-text">
+          <h2 class="info-heading">Sistema de Gestão<br />para Clínicas Médicas</h2>
+          <p class="info-description">
+            Plataforma profissional para gerenciamento completo de pacientes, médicos, consultas e agendamentos.
+          </p>
+        </div>
+
+        <div class="features-list">
+          <div class="feature-item">
+            <span class="feature-icon">■</span>
+            <span class="feature-text">Autenticação segura com JWT</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">■</span>
+            <span class="feature-text">Dashboard com indicadores em tempo real</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">■</span>
+            <span class="feature-text">Gestão completa de cadastros</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">■</span>
+            <span class="feature-text">Interface totalmente responsiva</span>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="auth-card">
-      <div class="auth-tabs">
-        <button
-          type="button"
-          class="tab-btn"
-          [class.active]="!isRegisterMode"
-          (click)="toggleMode(false)"
-        >
-          Entrar
-        </button>
-        <button
-          type="button"
-          class="tab-btn"
-          [class.active]="isRegisterMode"
-          (click)="toggleMode(true)"
-        >
-          Registrar
-        </button>
-      </div>
-
-      @if (errorMessage) {
-        <p class="status-message error">{{ errorMessage }}</p>
-      }
-
-      @if (successMessage) {
-        <p class="status-message success">{{ successMessage }}</p>
-      }
-
-      @if (!isRegisterMode) {
-        <form [formGroup]="loginForm" (ngSubmit)="submitLogin()">
-          <label class="field">
-            <span>Email</span>
-            <input type="email" formControlName="email" placeholder="voce@email.com" />
-          </label>
-
-          <label class="field">
-            <span>Senha</span>
-            <input type="password" formControlName="senha" placeholder="Sua senha" />
-          </label>
-
-          <button class="btn btn-primary full-width" type="submit" [disabled]="isLoading">
-            {{ isLoading ? 'Entrando...' : 'Acessar sistema' }}
-          </button>
-        </form>
-      } @else {
-        <form [formGroup]="registerForm" (ngSubmit)="submitRegister()">
-          <label class="field">
-            <span>Email</span>
-            <input type="email" formControlName="email" placeholder="voce@email.com" />
-          </label>
-
-          <label class="field">
-            <span>Senha</span>
-            <input type="password" formControlName="senha" placeholder="Crie uma senha" />
-          </label>
-
+    <!-- Right Panel - Form -->
+    <div class="auth-form-container">
+      <div class="form-card">
+        <div class="form-tabs">
           <button
-            class="btn btn-primary full-width"
-            type="submit"
-            [disabled]="registerLoading"
+            type="button"
+            class="tab-button"
+            [class.active]="!isRegisterMode"
+            (click)="toggleMode(false)"
           >
-            {{ registerLoading ? 'Registrando...' : 'Criar usuário' }}
+            <span class="tab-icon">→</span>
+            <span class="tab-label">Entrar</span>
           </button>
-        </form>
-      }
+          <button
+            type="button"
+            class="tab-button"
+            [class.active]="isRegisterMode"
+            (click)="toggleMode(true)"
+          >
+            <span class="tab-icon">+</span>
+            <span class="tab-label">Registrar</span>
+          </button>
+        </div>
+
+        <!-- Messages -->
+        @if (errorMessage) {
+          <div class="alert alert-error">
+            <span class="alert-icon">!</span>
+            <div class="alert-text">{{ errorMessage }}</div>
+            <button class="alert-close" type="button" (click)="errorMessage = ''">×</button>
+          </div>
+        }
+
+        @if (successMessage) {
+          <div class="alert alert-success">
+            <span class="alert-icon">✓</span>
+            <div class="alert-text">{{ successMessage }}</div>
+            <button class="alert-close" type="button" (click)="successMessage = ''">×</button>
+          </div>
+        }
+
+        <!-- Login Form -->
+        @if (!isRegisterMode) {
+          <form [formGroup]="loginForm" (ngSubmit)="submitLogin()" class="form">
+            <div class="form-group">
+              <label class="form-label">Email</label>
+              <div class="form-input-wrapper">
+                <span class="input-icon">&#64;</span>
+                <input
+                  type="email"
+                  formControlName="email"
+                  class="form-input"
+                  placeholder="seu.email@hospital.com"
+                  required
+                />
+              </div>
+              @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
+                <span class="form-error">Email válido é obrigatório</span>
+              }
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Senha</label>
+              <div class="form-input-wrapper">
+                <span class="input-icon">*</span>
+                <input
+                  type="password"
+                  formControlName="senha"
+                  class="form-input"
+                  placeholder="Digite sua senha"
+                  required
+                />
+              </div>
+              @if (loginForm.get('senha')?.invalid && loginForm.get('senha')?.touched) {
+                <span class="form-error">Senha é obrigatória (mínimo 4 caracteres)</span>
+              }
+            </div>
+
+            <button
+              class="btn btn-submit"
+              type="submit"
+              [disabled]="isLoading || loginForm.invalid"
+            >
+              @if (isLoading) {
+                <span class="btn-spinner"></span>
+                <span class="btn-text">Entrando...</span>
+              } @else {
+                <span class="btn-text">Acessar Sistema</span>
+              }
+            </button>
+          </form>
+        }
+
+        <!-- Register Form -->
+        @if (isRegisterMode) {
+          <form [formGroup]="registerForm" (ngSubmit)="submitRegister()" class="form">
+            <div class="form-group">
+              <label class="form-label">Email</label>
+              <div class="form-input-wrapper">
+                <span class="input-icon">&#64;</span>
+                <input
+                  type="email"
+                  formControlName="email"
+                  class="form-input"
+                  placeholder="seu.email@hospital.com"
+                  required
+                />
+              </div>
+              @if (registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
+                <span class="form-error">Email válido é obrigatório</span>
+              }
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Senha</label>
+              <div class="form-input-wrapper">
+                <span class="input-icon">*</span>
+                <input
+                  type="password"
+                  formControlName="senha"
+                  class="form-input"
+                  placeholder="Crie uma senha segura"
+                  required
+                />
+              </div>
+              @if (registerForm.get('senha')?.invalid && registerForm.get('senha')?.touched) {
+                <span class="form-error">Senha é obrigatória (mínimo 4 caracteres)</span>
+              }
+            </div>
+
+            <button
+              class="btn btn-submit"
+              type="submit"
+              [disabled]="registerLoading || registerForm.invalid"
+            >
+              @if (registerLoading) {
+                <span class="btn-spinner"></span>
+                <span class="btn-text">Registrando...</span>
+              } @else {
+                <span class="btn-text">Criar Usuário</span>
+              }
+            </button>
+          </form>
+        }
+
+        <!-- Footer -->
+        <div class="form-footer">
+          <p class="footer-text">
+            API disponível em <code>http://localhost:8080</code>
+          </p>
+        </div>
+      </div>
     </div>
   </div>
-</section>
+</div>
